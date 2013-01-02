@@ -1,5 +1,5 @@
 module SalesforceAPI
-
+  
   class ConnectionException < StandardError; end
   class ErrorReceivedException < StandardError; end
 
@@ -14,6 +14,14 @@ module SalesforceAPI
       @client_id = options[:client_id] ||= ENV["SALESFORCE_CLIENT_ID"]
       @client_secret = options[:client_secret] ||= ENV["SALESFORCE_CLIENT_SECRET"]
       @host = options[:host] ||= ENV["SALESFORCE_HOST"]
+      authorize
+    end
+
+    def attachment name, id
+      http_get( URI("#{instance_url}/services/data/v#{api_version}/sobjects/#{name}/#{id}/body")).body
+    end
+
+    def authorize
       begin
         parse_authorization_response( Net::HTTP.new(@host, 443).tap { |http|
           http.use_ssl = true
@@ -21,17 +29,21 @@ module SalesforceAPI
       rescue Errno::ECONNREFUSED
         raise ConnectionException, "Connection problem, did you supply a host?"
       end
+      self
     end
 
-    def attachment name, id
-      http_get( URI("#{instance_url}/services/data/v#{api_version}/sobjects/#{name}/#{id}/body")).body
-    end
-
-    def http_get uri
+    def http_get uri, auto_authorize = true
       req = Net::HTTP::Get.new(uri.request_uri)
       req["Authorization"] = "Bearer #{access_token}"
-      Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) do |http|
+      response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) do |http|
         http.request(req)
+      end
+
+      if response.instance_of?(Net::HTTPUnauthorized) && auto_authorize
+        authorize
+        http_get uri, false
+      else
+        response
       end
     end
 
