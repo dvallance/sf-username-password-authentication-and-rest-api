@@ -62,8 +62,7 @@ _Note:_ options will be used over ENV variables if both are available.
       client_id: "client_id", 
       client_secret: "client_secret",
       host: "test.salesforce.com"
-
-    }
+    })
 
 ### REST API Examples
 
@@ -80,7 +79,7 @@ Once you have a SalesforceAPI::Caller instance you can make calls like:
     caller.query "Select Id, ParentId, OwnerId, Name, Body From Attachment where ParentId = 'a0Ce00000005b9P'"
 
     # get a specific attachment as a binary/string
-    caller.attachment("Attachment", "00Pe0000000IVTyEAO").class
+    caller.attachment("Attachment", "00Pe0000000IVTyEAO")
 
 Responses are for the most part just JSON which is easily parsed like: 
     
