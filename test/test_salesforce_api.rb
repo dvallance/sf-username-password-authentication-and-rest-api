@@ -81,43 +81,4 @@ describe SalesforceAPI::Caller do
     end
 
   end
-
-  describe "Temp" do
-
-    it "tokens?" do
-      require "./salesforce_config"
-      caller = SalesforceAPI::Caller.new
-      puts "token = #{caller.access_token}"
-      caller.sobject "Communication_Log__c", "a0Ce00000005b9P"
-    end
-
-    it "temp testing" do
-      skip "temp"
-      caller = SalesforceAPI::Caller.new
-      puts caller.instance_url
-      puts caller.access_token
-      puts SalesforceAPI::api_versions
-
-      #puts caller.sobject "Contact", "003e0000002ghih", "Email" 
-      puts "============="
-      puts caller.sobject "Communication_Log__c", "a0Ce00000005b9P"
-      puts "============="
-      
-      #attachments = JSON.parse(caller.query "Select Id, ParentId, OwnerId, Name, Body From Attachment where ParentId = 'a0Ce00000005b9P'")["records"].collect{|hash| hash["Body"]}
-      attachments = JSON.parse(caller.query "Select Id, ParentId, OwnerId, Name, Body From Attachment where ParentId = 'a0Ce00000005b9P'")
-      puts attachments.merge("type" => "Attachments")
-      puts "============="
-      puts caller.attachment("Attachment", "00Pe0000000IVTyEAO")
-      #puts caller.sobject "Attachment", "00Pe0000000IVTy"
-      #puts caller.attachment "Attachment", "00Pe0000000IVTy" 
-      #puts caller.attachment "Attachment", "00Pe0000000IVU3" 
-      puts "============="
-      puts caller.sobject "Contact", "003e0000002ghihAAA", "Email" 
-      puts caller.sobject "Contact", "003e0000002ghihAAA"
-    end
-
-  end
-
-  
-
 end
