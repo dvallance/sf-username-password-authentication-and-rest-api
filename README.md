@@ -7,7 +7,7 @@ I wanted a simple easy way to interact with the [Salesforce REST API](http://www
 1. Handle authorization and re-authorization when the callers session token expires.
 2. Provide a generic low level method to make API calls, and provide some of the more common calls (so far I have only added a couple which is all I needed).
 
-# Assuptions
+# Assumptions
 
 I try to never have any, I simple expose the REST API calls in a easy manor and return JSON results.
 
@@ -39,7 +39,7 @@ You can see a list of available Salesforce Rest API Versions like this:
 
     SalesforceAPI::versions("na1.salesforce.com") # defaults to this host if not supplied.
 
-### Environmental Values
+### Credentials from Environmental Values
     
     # Example of pointing to a sandbox.
     ENV["SALESFORCE_API_VERSION"] = "26.0" 
@@ -51,7 +51,7 @@ You can see a list of available Salesforce Rest API Versions like this:
 
     caller = SalesforceAPI::Caller.new
 
-### Directly as Options
+### Credentials supplied as Options
 
 _Note:_ options will be used over ENV variables if both are available.
 
@@ -67,7 +67,7 @@ _Note:_ options will be used over ENV variables if both are available.
 
 ### REST API Calls Examples
 
-Once you have a SalesforceAPI::Caller instance you can make calls like this.
+Once you have a SalesforceAPI::Caller instance you can make calls like:
     
     # get an object by its type and its id.
     caller.sobject "Communication_Log__c", "a0Ce00000005c9G" 
@@ -81,6 +81,10 @@ Once you have a SalesforceAPI::Caller instance you can make calls like this.
 
     # get a specific attachment as a binary/string
     caller.attachment("Attachment", "00Pe0000000IVTyEAO").class
+
+Responses are for the most part just JSON which is easily parsed like: 
+    
+    JSON.parse(response)
 
 ### Want more API call methods?
 
