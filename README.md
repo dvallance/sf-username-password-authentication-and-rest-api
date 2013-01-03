@@ -65,7 +65,7 @@ _Note:_ options will be used over ENV variables if both are available.
 
     }
 
-### REST API Calls Examples
+### REST API Examples
 
 Once you have a SalesforceAPI::Caller instance you can make calls like:
     
@@ -86,7 +86,7 @@ Responses are for the most part just JSON which is easily parsed like:
     
     JSON.parse(response)
 
-### Want more API call methods?
+### Want more API Methods?
 
 This is all I needed for my current project but if there is a demand/need for more let me know I'll add them or better yet contribute!
 
