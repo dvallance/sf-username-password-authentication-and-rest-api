@@ -1,6 +1,6 @@
 # Purpose
 
-I wanted a simple easy way to interact with the [Salesforce REST API](http://www.salesforce.com/us/developer/docs/api_rest/index_Left.htm) using their [Username-Password OAuth Authentication Flow](http://www.salesforce.com/us/developer/docs/api_rest/Content/intro_understanding_username_password_oauth_flow.htm).
+I wanted a simply easy way to interact with the [Salesforce REST API](http://www.salesforce.com/us/developer/docs/api_rest/index_Left.htm) using their [Username-Password OAuth Authentication Flow](http://www.salesforce.com/us/developer/docs/api_rest/Content/intro_understanding_username_password_oauth_flow.htm).
 
 # Goal
 
