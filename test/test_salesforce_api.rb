@@ -79,6 +79,5 @@ describe SalesforceAPI::Caller do
         response.must_equal mock_response
       end
     end
-
   end
 end

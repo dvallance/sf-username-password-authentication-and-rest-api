@@ -2,6 +2,7 @@ module SalesforceAPI
   
   class ConnectionException < StandardError; end
   class ErrorReceivedException < StandardError; end
+  class Error400 < StandardError; end
 
   class Caller
 
@@ -47,6 +48,23 @@ module SalesforceAPI
       end
     end
 
+    def http_patch uri, body, auto_authorize = true
+      req = Net::HTTPGenericRequest.new("PATCH", nil, nil, uri.request_uri)
+      req["Authorization"] = "Bearer #{access_token}"
+      req["Content-Type"] = "application/json"
+      req.body = body.to_json
+      response = Net::HTTP.start( uri.hostname, uri.port, :use_ssl => true ) do |http|
+        http.request( req )
+      end
+
+      if response.instance_of?(Net::HTTPUnauthorized) && auto_authorize
+        authorize
+        http_patch uri, body, false
+      else
+        response
+      end
+    end
+
     def sobject name, id, fields = ""
       uri = URI("#{instance_url}/services/data/v#{api_version}/sobjects/#{name}/#{id}")
       uri.query = {:fields => fields}.to_query unless fields.empty?
@@ -67,6 +85,14 @@ module SalesforceAPI
         :client_id => @client_id,
         :client_secret => @client_secret
       }.delete_if{|k,v| v.to_s.empty?} : @token_request_parameters
+    end
+
+    def update name, id, body = {}
+      uri = URI("#{instance_url}/services/data/v#{api_version}/sobjects/#{name}/#{id}")
+      response = http_patch( uri, body )
+      if response.instance_of? Net::HTTPBadRequest
+        raise Error400, "The request could not be understood, usually because the JSON or XML body contains an error. Code[#{response.code}]."
+      end
     end
 
     private
